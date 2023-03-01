@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import axios from "axios";
+import "./App.css";
 
 function App() {
+  const [data, setData] = useState("Click the button below for Advice");
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("https://api.adviceslip.com/advice");
+      const { advice } = response.data.slip;
+      return advice;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleClick = async () => {
+    const response = await fetchData();
+    if (response) {
+      setData(response);
+    } else {
+      console.log("error");
+    }
+
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div className="App">
+        <div className="card">
+          <h1 className="heading">{data}</h1>
+        </div>
+          <button className="button-23" onClick={handleClick}>Give me Advice</button>
+      </div>
     </div>
   );
 }
